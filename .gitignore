@@ -1,0 +1,7 @@
+gui.spec
+setup.iss
+Trovaparadigmi_venv
+build
+dist
+Output
+__pycache__

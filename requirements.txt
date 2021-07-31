@@ -1,0 +1,9 @@
+beautifulsoup4
+lxml
+Unidecode
+PySimpleGUI
+clipboard
+asyncio
+aiohttp
+pathvalidate
+configparser
