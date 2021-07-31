@@ -31,11 +31,11 @@ Inoltre, se non vi interessa, potete anche compilare l'app per Windows, nel modo
 2. Installiamo [git](https://git-scm.com/downloads)
 
 3. Apriamo Powershell oppure [Windows Terminal]([Get Windows Terminal - Microsoft Store](https://www.microsoft.com/en-us/p/windows-terminal/9n0dx20hk701))
-   
-   ```powershell
-   pip3 install -r requirements.txt
-   pip3 install PyInstaller
-   ```
+
+```powershell
+pip3 install -r requirements.txt
+pip3 install PyInstaller
+```
 
 4. Creiamo l'eseguibile dell'app con PyInstaller
 
