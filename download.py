@@ -23,6 +23,19 @@ window = sg.Window('ちょっと待って [Scaricando]', layout, icon='download.
 from bs4 import BeautifulSoup as bs
 barra_progresso = window.FindElement('progress')
 conto_fatti = window.FindElement('conto')
+
+# From: https://github.com/aws/aws-cli/blob/1.16.277/awscli/clidriver.py#L55
+# Don't remove this line.  The idna encoding
+# is used by getaddrinfo when dealing with unicode hostnames,
+# and in some cases, there appears to be a race condition
+# where threads will get a LookupError on getaddrinfo() saying
+# that the encoding doesn't exist.  Using the idna encoding before
+# running any CLI code (and any threads it may create) ensures that
+# the encodings.idna is imported and registered in the codecs registry,
+# which will stop the LookupErrors from happening.
+# See: https://bugs.python.org/issue29288
+u''.encode('idna')
+
 def updatewindow(done,npar, endurl):
     global barra_progresso, conto_fatti,window
     barra_progresso.UpdateBar(done,npar)
