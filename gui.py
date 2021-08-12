@@ -255,6 +255,7 @@ def popup_err_generico():
 
 
 def check_preferences():
+    global formeflesse,smartest,accenti,paradigmasemplice
     config = configparser.ConfigParser()
     config.add_section("preferences")
     layout = [[sg.Text('Seleziona le tue preferenze.', font=(titolograssetto), justification='center')],
@@ -262,20 +263,20 @@ def check_preferences():
                         font=("Arial", 16))],
                 [sg.HorizontalSeparator()],
                 [sg.Text("Scrittura dei paradigmi: semplificata?", font=(paragrafo))],
-                [sg.Radio('facio, facis, facere', "stileparadigma", key="paradigmasemplice", enable_events=True)],
-                [sg.Radio('facio, facis, feci, factum, facere', "stileparadigma", key="paradigmacomplesso", enable_events=True, default=True)],
+                [sg.Radio('facio, facis, facere', "stileparadigma", key="paradigmasemplice", enable_events=True, default=paradigmasemplice)],
+                [sg.Radio('facio, facis, feci, factum, facere', "stileparadigma", key="paradigmacomplesso", enable_events=True, default=not paradigmasemplice)],
                 [sg.HorizontalSeparator()],
-                [sg.Checkbox('Rimuovi accenti', default=True, font=(paragrafo), key="accenti", pad=(0, 0))],
+                [sg.Checkbox('Rimuovi accenti', default=not accenti, font=(paragrafo), key="accenti", pad=(0, 0))],
                 [sg.Text(
                     'Rimuove gli accenti dai paradigmi trovati, potresti essere meno sgamabile per averli copiati online.',
                     pad=(12, 12))],
                 [sg.HorizontalSeparator()],
-                [sg.Checkbox('Riconoscimento intelligente ausiliare', default=True, font=(paragrafo), key="smartest", pad=(0, 0))],
+                [sg.Checkbox('Riconoscimento intelligente ausiliare', default=smartest, font=(paragrafo), key="smartest", pad=(0, 0))],
                 [sg.Text(
                     'Con questa opzione quando traduci una versione sarà automaticamente riconosciuta la presenza del verbo essere come ausiliare.\nAd esempio, in "factum erat" il verbo essere (sum,es,fui,esse) non sarà aggiunto alla lista dei paradigmi. ',
                     pad=(12, 12))],
                 [sg.HorizontalSeparator()],
-                [sg.Checkbox('Forme flesse', default=False, font=(paragrafo), key="ff", pad=(0, 0))],
+                [sg.Checkbox('Forme flesse', default=formeflesse, font=(paragrafo), key="ff", pad=(0, 0))],
                 [sg.Text(
                     'Con questa opzione raramente puoi avere la possibilità di trovare verbi altrimenti riconosciuti come sostantivi.\nNon la consiglio, è scomoda ed irritante, perché porta alla creazione di numerose finestre di disambiguazione.\n\nPossibili vantaggi durante la traduzione della versione:\n-maggiore precisione nel riconoscimento dei verbi\n-riconoscimento e disambiguazione participi.\n\nUsandola a lungo, migliorerà.',
                     pad=(12, 12))],
@@ -286,7 +287,6 @@ def check_preferences():
     while True:  # Event Loop
         event, values = window.Read()
         if event == 'Continua':
-            global formeflesse,smartest,accenti,paradigmasemplice
             if values["ff"] == True:
                 formeflesse = True
                 config.set("preferences", "ff", "True")
