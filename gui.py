@@ -743,8 +743,8 @@ def traduci_versione():
                   [sg.ProgressBar(1, orientation='h', size=(50, 30), key='progress')
                   ]]
     window = sg.Window('ちょっと待って', layout, finalize=True, icon='icona.ico')
-    barra_progresso = window.FindElement('progress')
-    conto_fatti = window.FindElement('conto')
+    barra_progresso = window['progress']
+    conto_fatti = window['conto']
     c = 0
     count_paradigmi = 0
     parola_precedente = None

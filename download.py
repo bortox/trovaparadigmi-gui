@@ -21,8 +21,8 @@ layout = [[sg.Text('Scaricamento ed analisi iniziale in corso', font=("Arial", 2
                   [sg.Text('Suggerimento: il programma salva i file nella cartella .latin_paradigm_finder.\nPiù volte lo userai, più diventerà veloce grazie ai file già salvati.')]]
 window = sg.Window('ちょっと待って [Scaricando]', layout, icon='download.ico', finalize=True)
 from bs4 import BeautifulSoup as bs
-barra_progresso = window.FindElement('progress')
-conto_fatti = window.FindElement('conto')
+barra_progresso = window['progress']
+conto_fatti = window['conto']
 
 # From: https://github.com/aws/aws-cli/blob/1.16.277/awscli/clidriver.py#L55
 # Don't remove this line.  The idna encoding
