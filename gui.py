@@ -26,8 +26,9 @@ sottotitolo = 'Arial 14'
 paragrafo = 'Arial 12'
 
 def make_dpi_aware(): # Fix for high-DPI screens on Windows
-    if int(platform.release()) >= 8:
-        ctypes.windll.shcore.SetProcessDpiAwareness(True)
+    if platform.system() == 'Windows':
+        if int(platform.release()) >= 8:
+            ctypes.windll.shcore.SetProcessDpiAwareness(True)
 make_dpi_aware()
 
 def load_preferences(filename):

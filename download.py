@@ -36,8 +36,9 @@ conto_fatti = window['conto']
 u''.encode('idna')
 
 def make_dpi_aware(): # Fix for high-DPI screens on Windows
-    if int(platform.release()) >= 8:
-        ctypes.windll.shcore.SetProcessDpiAwareness(True)
+    if platform.system() == 'Windows':
+        if int(platform.release()) >= 8:
+            ctypes.windll.shcore.SetProcessDpiAwareness(True)
 make_dpi_aware()
 
 def updatewindow(done,npar, endurl):
