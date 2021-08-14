@@ -7,26 +7,11 @@ home_path = Path.home()
 temp_html_path = home_path.joinpath('.latin_paradigm_finder')
 temp_html_path.mkdir(parents=True, exist_ok=True)
 sg.set_options(font=font)
-import configparser
-import urllib.request, urllib.error, urllib.parse, webbrowser, sys, clipboard
+import urllib.request, urllib.error, urllib.parse, webbrowser, sys, clipboard, configparser, aiohttp, ctypes, platform
 from re import sub
-import aiohttp
 from bs4 import BeautifulSoup as bs
 from pathvalidate import sanitize_filepath
 from unidecode import unidecode as rimuovi_accenti
-
-# From: https://github.com/aws/aws-cli/blob/1.16.277/awscli/clidriver.py#L55 ( per sicurezza anche qui )
-# Don't remove this line.  The idna encoding
-# is used by getaddrinfo when dealing with unicode hostnames,
-# and in some cases, there appears to be a race condition
-# where threads will get a LookupError on getaddrinfo() saying
-# that the encoding doesn't exist.  Using the idna encoding before
-# running any CLI code (and any threads it may create) ensures that
-# the encodings.idna is imported and registered in the codecs registry,
-# which will stop the LookupErrors from happening.
-# See: https://bugs.python.org/issue29288
-u''.encode('idna')
-
 parolancora = True
 formeflesse = False
 smartest = True
@@ -40,6 +25,10 @@ titolograssetto = 'Arial 20 bold'
 sottotitolo = 'Arial 14'
 paragrafo = 'Arial 12'
 
+def make_dpi_aware(): # Fix for high-DPI screens on Windows
+    if int(platform.release()) >= 8:
+        ctypes.windll.shcore.SetProcessDpiAwareness(True)
+make_dpi_aware()
 
 def load_preferences(filename):
     x = temp_html_path / filename

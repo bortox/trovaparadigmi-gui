@@ -1,9 +1,8 @@
-import aiohttp, asyncio, sys
+import aiohttp, asyncio, sys, configparser, ctypes, platform
 from base64 import b64encode
 from pathlib import Path
 from time import sleep
 import PySimpleGUI as sg
-import configparser
 home_path = Path.home()
 temp_html_path = home_path.joinpath('.latin_paradigm_finder')
 temp_html_path.mkdir(parents=True, exist_ok=True)
@@ -35,6 +34,11 @@ conto_fatti = window['conto']
 # which will stop the LookupErrors from happening.
 # See: https://bugs.python.org/issue29288
 u''.encode('idna')
+
+def make_dpi_aware(): # Fix for high-DPI screens on Windows
+    if int(platform.release()) >= 8:
+        ctypes.windll.shcore.SetProcessDpiAwareness(True)
+make_dpi_aware()
 
 def updatewindow(done,npar, endurl):
     global barra_progresso, conto_fatti,window
