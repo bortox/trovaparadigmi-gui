@@ -26,11 +26,11 @@ Inoltre, se non vi interessa, potete anche compilare l'app per Windows, nel modo
 
 ### Compilare su Windows
 
-1. Installiamo [Python3 dallo Store di Windows](https://www.microsoft.com/en-us/p/python-38/9mssztt1n39l?activetab=pivot:overviewtab)
+1. Installiamo [Python3 dal sito ufficiale](https://www.python.org/downloads/)
 
 2. Installiamo [git](https://git-scm.com/downloads)
 
-3. Apriamo Powershell oppure [Windows Terminal]([Get Windows Terminal - Microsoft Store](https://www.microsoft.com/en-us/p/windows-terminal/9n0dx20hk701))
+3. Apriamo Powershell oppure [Windows Terminal](https://www.microsoft.com/en-us/p/windows-terminal/9n0dx20hk701)
 
 ```powershell
 pip3 install -r requirements.txt
@@ -40,7 +40,7 @@ pip3 install PyInstaller
 4. Creiamo l'eseguibile dell'app con PyInstaller
 
 ```powershell
-pyinstaller --clean --onefile --windowed --icon="C:\full_path_to\icona.ico" gui.py
+python3 -m PyInstaller --clean --onefile --windowed --icon="C:\full_path_to\icona.ico" gui.py
 ```
 
 Adesso, aprendo l'eseguibile gui.exe nella cartella dist, possiamo avviare l'app.
