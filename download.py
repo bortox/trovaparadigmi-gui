@@ -78,7 +78,7 @@ async def task(name, work_queue):
                             paradigma = paradigmal[0].get_text()
                             paradigma = paradigma.replace("[", "").replace("]", "").replace("|","")
                             itatrad = soup.findAll('span', {"class": "italiano"})[0]
-                            if 'participio' in itatrad.get_text():
+                            if 'participio' in tipo:
                                 participiolink = baseurl2 + itatrad.findAll('span', {"class": "paradigma"})[0].findAll('a', href=True)[0]['href']
                                 config.set("parola", "participio", participiolink)
                             config.set("parola", "paradigma", paradigma)

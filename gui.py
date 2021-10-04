@@ -96,7 +96,7 @@ def parse_html_to_ini(html, url):  # Analizza il codice HTML e lo scrive in un f
                 paradigma = paradigmal[0].get_text()
                 paradigma = paradigma.replace("[", "").replace("]", "").replace("|","")
                 itatrad = soup.findAll('span', {"class": "italiano"})[0]
-                if 'participio' in itatrad.get_text():
+                if 'participio' in tipo:
                     participiolink = baseurl2 + itatrad.findAll('span', {"class": "paradigma"})[0].findAll('a', href=True)[0]['href']
                     config.set("parola", "participio", participiolink)
                 config.set("parola", "paradigma", paradigma)
@@ -210,6 +210,18 @@ def analyze_config_file_return_paradigma(fname,autodisambigua):
                 return ','.join(li)
             else: return y
         else:
+            participiolink = (config.get('parola', 'participio', fallback=False))
+            if participiolink != False:
+                tipo = config.get('parola', 'tipo', fallback='participio')
+                if autodisambigua != 'Yes':
+                    fverbale = sg.PopupYesNo(f'{y} è un {tipo}',
+                                             'Ha funzione verbale (cioé non può essere interpretato NÉ come nome NÉ come aggettivo)?\n\nIn caso affermativo, rispondi "Yes" ed aggiungerò il paradigma alla lista!')
+                    if fverbale == 'Yes':  # Scelta di aggiungere alla lista paradigmi
+                        fname = parse_filename_from_url(participiolink)
+                        return analyze_config_file_return_paradigma(fname, True)
+                else:  # Autodisambiguazione attiva, participio incluso.
+                    fname = parse_filename_from_url(participiolink)
+                    return analyze_config_file_return_paradigma(fname, True)
             return 1  # Codice d'errore se la parola ha un paradigma ma non è un verbo
     if y == "indeclinabile": return 2  # Codice d'errore se la parola è indeclinabile e non ha un paradigma
     y = config.get('disambigua', 'nessunverbo', fallback='v')
@@ -221,11 +233,12 @@ def analyze_config_file_return_paradigma(fname,autodisambigua):
     if participiolink != False:
         tipo = config.get('parola', 'tipo', fallback='participio')
         if autodisambigua != 'Yes':
-            fverbale = sg.PopupYesNo(f'Questo è un {tipo}', 'Ha funzione verbale ( ossia non può essere interpretato come nome oppure aggettivo ) ?\nIn caso affermativo, rispondi "Yes" e ne sarà aggiunto il paradigma alla lista finale!')
-            if fverbale == 'Yes':
+            fverbale = sg.PopupYesNo(f'{y} è un {tipo}',
+                                     'Ha funzione verbale (cioé non può essere interpretato NÉ come nome NÉ come aggettivo)?\n\nIn caso affermativo, rispondi "Yes" ed aggiungerò il paradigma alla lista!')
+            if fverbale == 'Yes': # Scelta di aggiungere alla lista paradigmi
                 fname = parse_filename_from_url(participiolink)
                 return analyze_config_file_return_paradigma(fname,True)
-        else:
+        else: # Autodisambiguazione attiva, participio incluso.
             fname = parse_filename_from_url(participiolink)
             return analyze_config_file_return_paradigma(fname,True)
     else:
@@ -234,6 +247,7 @@ def analyze_config_file_return_paradigma(fname,autodisambigua):
         verbs = config.get('disambigua', 'verbs').split('#')
         url = disambigua_verb_window(texts, links, verbs, fname.split('.', 1)[0], autodisambigua)
         fname = parse_filename_from_url(url)
+        print(fname)
         check_config_file_if_not_exist_download(fname)
         return analyze_config_file_return_paradigma(fname,True) #paradigma
 
@@ -268,7 +282,7 @@ def check_preferences():
                 [sg.HorizontalSeparator()],
                 [sg.Checkbox('Forme flesse', default=formeflesse, font=(paragrafo), key="ff", pad=(0, 0))],
                 [sg.Text(
-                    'Con questa opzione raramente puoi avere la possibilità di trovare verbi altrimenti riconosciuti come sostantivi.\nNon la consiglio, è scomoda ed irritante, perché porta alla creazione di numerose finestre di disambiguazione.\n\nPossibili vantaggi durante la traduzione della versione:\n-maggiore precisione nel riconoscimento dei verbi\n-riconoscimento e disambiguazione participi.\n\nUsandola a lungo, migliorerà.',
+                    'Grazie a questa opzione, se hai tempo da perdere, durante la traduzione delle versioni,\npuoi disambiguare meglio le parole, affinando la lista dei paradigmi al meglio.\n\nAttivando questa opzione, la maggioranza dei participi sarà rilevata.\nPotrai decidere se aggiungerli alla lista dei paradigmi in base alla loro funzione.\n\nSe non hai tempo da perdere, è scomoda ed irritante, perché porta alla creazione di numerose finestre di disambiguazione,\nperò i paradigmi di molti participi potrebbero non essere rilevati.\n\nPossibili vantaggi durante la traduzione della versione:\n-maggiore precisione nel riconoscimento dei verbi\n-riconoscimento e disambiguazione participi.\n-miglioramento della qualità della lista di paradigmi sul lungo termine e della velocità,\ngrazie all\'opzione "non mostrare più" che equivale ad una preferenza permanente di traduzione, in una scelta di disambiguazione.',
                     pad=(12, 12))],
                 [sg.HorizontalSeparator()],
                 [sg.Button('Continua')]]
